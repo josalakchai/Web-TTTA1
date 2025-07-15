@@ -4,30 +4,37 @@ import Image from 'next/image';
 
 const coreTeam = [
   {
-    name: 'Dr. Sophia Lin',
+    name: 'Tle',
     title: 'Director of AI Research',
-    image: '/photo-1573496359142-b8d87734a5a2.png',
+    image: '/5m.png',
     quote: "AI is not just about algorithms—it's about amplifying human potential.",
     socials: ['linkedin', 'twitter'],
   },
   {
     name: 'Marcus Johnson',
     title: 'Head of Web Development',
-    image: '/photo-1600486913747-55e5470d6f40.png',
+    image: '/2m.png',
     quote: "The web is our generation's most powerful platform for democratizing opportunity.",
     socials: ['linkedin'],
   },
   {
     name: 'Aisha Patel',
     title: 'Startup Coach',
-    image: '/photo-1580489944761-15a19d654956.png',
+    image: '/07mt.jpg',
     quote: "Great startups begin with a problem worth solving, not just a product worth building.",
     socials: ['linkedin', 'twitter'],
   },
   {
     name: 'Carlos Rodriguez',
     title: 'Community Strategist',
-    image: '/photo-1507003211169-0a1dd7228f2d.png',
+    image: '/6m.png',
+    quote: "Technology should lift entire communities, not just individuals.",
+    socials: ['twitter'],
+  },
+  {
+    name: 'Carlos Rodriguez',
+    title: 'Community Strategist',
+    image: '/902.png',
     quote: "Technology should lift entire communities, not just individuals.",
     socials: ['twitter'],
   },
@@ -35,27 +42,99 @@ const coreTeam = [
 
 const mentors = [
   {
-    name: 'Dr. James Wong',
+    name: 'tao.isaman',
     title: 'AI Ethicist',
-    image: '/photo-1472099645785-5658abf4ff4e.png',
+    image: '/004.png',
     quote: "We must build AI systems that reflect our highest values, not just our capabilities.",
   },
   {
-    name: 'Priya Sharma',
+    name: 'Nitikorn',
     title: 'UX Designer',
-    image: '/photo-1619946794135-5bc917a27793.png',
+    image: '/003.png',
     quote: "Design that puts humans first creates technology that lasts.",
   },
   {
-    name: 'Samuel Okafor',
+    name: 'Makhanthiya',
     title: 'Tech Entrepreneur',
-    image: '/photo-1563237023-b1e970526dcb.png',
+    image: '/016.png',
     quote: "Building a business is about creating value first, profits second.",
+  },
+  {
+    name: 'Bright',
+    title: 'Full-stack Developer',
+    image: '/001.png',
+    quote: "Great engineers don't just write code—they solve problems that matter.",
   },
   {
     name: 'Elena Martinez',
     title: 'Full-stack Developer',
-    image: '/photo-1593529467220-9d721ceb9a78.png',
+    image: '/006.png',
+    quote: "Great engineers don't just write code—they solve problems that matter.",
+  },
+  {
+    name: 'Elena Martinez',
+    title: 'Full-stack Developer',
+    image: '/007.png',
+    quote: "Great engineers don't just write code—they solve problems that matter.",
+  },
+  {
+    name: 'Elena Martinez',
+    title: 'Full-stack Developer',
+    image: '/009.png',
+    quote: "Great engineers don't just write code—they solve problems that matter.",
+  },
+  {
+    name: 'Elena Martinez',
+    title: 'Full-stack Developer',
+    image: '/005.png',
+    quote: "Great engineers don't just write code—they solve problems that matter.",
+  },
+  {
+    name: 'Elena Martinez',
+    title: 'Full-stack Developer',
+    image: '/010.png',
+    quote: "Great engineers don't just write code—they solve problems that matter.",
+  },
+  {
+    name: 'Elena Martinez',
+    title: 'Full-stack Developer',
+    image: '/.png',
+    quote: "Great engineers don't just write code—they solve problems that matter.",
+  },
+  {
+    name: 'Elena Martinez',
+    title: 'Full-stack Developer',
+    image: '/012.png',
+    quote: "Great engineers don't just write code—they solve problems that matter.",
+  },
+  {
+    name: 'Elena Martinez',
+    title: 'Full-stack Developer',
+    image: '/013.png',
+    quote: "Great engineers don't just write code—they solve problems that matter.",
+  },
+  {
+    name: 'Elena Martinez',
+    title: 'Full-stack Developer',
+    image: '/015.png',
+    quote: "Great engineers don't just write code—they solve problems that matter.",
+  },
+  {
+    name: 'Elena Martinez',
+    title: 'Full-stack Developer',
+    image: '/014.png',
+    quote: "Great engineers don't just write code—they solve problems that matter.",
+  },
+  {
+    name: 'Elena Martinez',
+    title: 'Full-stack Developer',
+    image: '/011.png',
+    quote: "Great engineers don't just write code—they solve problems that matter.",
+  },
+  {
+    name: 'Elena Martinez',
+    title: 'Full-stack Developer',
+    image: '/008.png',
     quote: "Great engineers don't just write code—they solve problems that matter.",
   },
 ];
@@ -123,7 +202,7 @@ const Card = ({
 }) => (
   <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between">
     <div className="relative">
-      <Image src={image} alt={name} className="h-60 w-full object-cover" width={300} height={300} />
+      <Image src={image} alt={name} className="h-60 w-full object-cover" width={1920} height={1920} />
       <div className="absolute bottom-0 left-0 w-full px-4 py-2 bg-gradient-to-t from-black/80 to-transparent text-white font-bold">
         {name}
         <p className="text-sm font-medium">{title}</p>
@@ -151,7 +230,7 @@ export default function Team() {
       {/* Core Team */}
       <div className="max-w-7xl mx-auto mb-8 md:mb-12">
         <h3 className="text-xl md:text-2xl font-bold text-[#011133] mb-6 text-center">Co-Founder</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 px-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 px-4">
           {coreTeam.map((member, idx) => (
             <Card key={idx} {...member} />
           ))}

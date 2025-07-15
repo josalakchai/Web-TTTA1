@@ -33,7 +33,7 @@ export default function Home() {
 
                     </div>
                     {/* 500+ Graduates Badge */}
-                    <div className="absolute w-[100px] h-[50px] -bottom-[5%] -left-[3%] text-white text-sm font-semibold px-4 py-4 rounded-lg shadow-lg backdrop-blur-sm bg-[#F7931B]/90 group">
+                    <div className="absolute w-[100px] h-[50px] -bottom-[5%] -left-[4%] text-white text-sm font-semibold px-4 py-4 rounded-lg shadow-lg backdrop-blur-sm bg-[#F7931B]/90 group">
 
                     </div>
                     <div className="relative shadow-lg">
