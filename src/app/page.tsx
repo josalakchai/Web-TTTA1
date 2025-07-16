@@ -4,11 +4,9 @@ import Home from './components/Home';
 import Everyone from './components/mission';
 import Customers from './components/Customers';
 import Programs from './components/Programs';
-// import Success from './components/Success';
 import Partners from './components/Partners';
 import Performance from './components/Performance'; 
 import About from './components/About';
-import Values from './components/Values';
 import Team from './components/Team';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
@@ -27,7 +25,6 @@ export default function Page() {
       <Research />
       <Customers />
       <Performance />
-      {/* <Values /> */}
       <Team />
       <Contact />
       <Footer />
