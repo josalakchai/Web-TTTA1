@@ -1,8 +1,31 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
+import 'aos/dist/aos.css';
 
 export default function About() {
+  useEffect(() => {
+    let AOS: any;
+    const loadAOS = async () => {
+      if (typeof window !== 'undefined') {
+        const aosModule = await import('aos');
+        AOS = aosModule.default ? aosModule.default : aosModule;
+        AOS.init({
+          once: true,
+          duration: 900,
+          offset: 80,
+        });
+      }
+    };
+    loadAOS();
+
+    return () => {
+      if (AOS && typeof AOS.refreshHard === 'function') {
+        AOS.refreshHard();
+      }
+    };
+  }, []);
+
   return (
     <section id="about" className="bg-[#f7f9fc] py-20 px-4 relative overflow-hidden">
       <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
@@ -11,7 +34,7 @@ export default function About() {
         <div className="absolute -bottom-[300px] -left-[300px] w-[400px] h-[800px] lg:w-[800px] lg:h-[550px] bg-[#011133] opacity-[0.05] rounded-full"></div>
 
         {/* LEFT - Text Content */}
-        <div>
+        <div data-aos="fade-zoom-in"  data-aos-duration="2000">
           <h2 className="text-3xl font-bold text-[#011133] mb-6">About The Academy</h2>
           <p className="text-lg text-gray-700 mb-4">
             The Tiger Team Academy was founded in 2018 with a vision to transform tech education by bridging the gap between theoretical knowledge and real-world application.
@@ -37,11 +60,16 @@ export default function About() {
         </div>
 
         {/* RIGHT - Image + Quote */}
-        <div className="relative">
+        <div className="relative" data-aos="fade-zoom-in" data-aos-duration="2000">
+          {/* วงกลมพื้นหลังด้านขวา (สีส้ม) */}
+          <div className="absolute -top-4 -right-6 w-[100px] h-[60px] bg-[#F7931B] shadow-lg rounded-lg px-4 py-3 flex items-center gap-3 z-0"></div>
+          {/* วงกลมพื้นหลังด้านซ้าย (สีน้ำเงิน/คราม) */}
+          <div className="absolute -bottom-5 -left-6 w-[100px] h-[60px] bg-[#011133] shadow-lg rounded-lg px-4 py-3 flex items-center gap-3 z-0"></div>
+
           <Image
             src="/Team.png"
             alt="Students at Tiger Team Academy"
-            className="rounded-lg shadow-lg"
+            className="rounded-lg shadow-lg relative z-10"
             width={620}
             height={24}
           />

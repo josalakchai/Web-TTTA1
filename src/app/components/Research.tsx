@@ -1,12 +1,38 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
+import 'aos/dist/aos.css';
 
 export default function Research() {
+  useEffect(() => {
+    let AOS: any;
+    const loadAOS = async () => {
+      if (typeof window !== 'undefined') {
+        const aosModule = await import('aos');
+        AOS = aosModule.default ? aosModule.default : aosModule;
+        AOS.init({
+          once: true,
+          duration: 900,
+          offset: 80,
+        });
+      }
+    };
+    loadAOS();
+
+    return () => {
+      if (AOS && typeof AOS.refreshHard === 'function') {
+        AOS.refreshHard();
+      }
+    };
+  }, []);
+
   return (
     <section className="bg-white py-20 px-4">
       {/* Title */}
-      <div className="max-w-7xl mx-auto text-center mb-12">
+      <div
+        className="max-w-7xl mx-auto text-center mb-12"
+        data-aos="fade-up"
+      >
         <h2 className="text-4xl font-bold text-[#011133]">Join Our Research</h2>
         <p className="text-gray-600 mt-3 max-w-3xl mx-auto">
           Collaborating with industry leaders, academic institutions, and community<br /> organizations to provide the best opportunities for our students.
@@ -16,7 +42,10 @@ export default function Research() {
       {/* Partner Logos */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         <div
-          className="bg-[#f7f9fc] p-6 rounded-lg shadow-sm flex flex-col items-center text-center"
+          className="flex flex-col items-center text-center"
+          data-aos="fade-right"
+          data-aos-delay="0"
+          data-aos-duration="1000"
         >
           {/* Image Container with fixed height */}
           <div className="w-full h-24 mb-4 flex items-center justify-center">
@@ -36,27 +65,11 @@ export default function Research() {
             <p className="text-gray-500 text-sm">---</p>
           </div>
         </div>
-        {/* <div
-          className="bg-[#f7f9fc] p-6 rounded-lg shadow-sm flex flex-col items-center text-center"
-        >
-          <div className="w-full h-24 mb-4 flex items-center justify-center">
-            <div className="relative w-90 h-90">
-              <Image
-                src="/Mit1.png"
-                alt="Default Partner"
-                fill
-                className="object-contain"
-              />
-            </div>
-          </div>
-
-          <div className="min-h-[60px] flex flex-col justify-center">
-            <h3 className="text-[#011133] font-semibold">---</h3>
-            <p className="text-gray-500 text-sm">---</p>
-          </div>
-        </div> */}
         <div
-          className="bg-[#f7f9fc] p-6 rounded-lg shadow-sm flex flex-col items-center text-center"
+          className="flex flex-col items-center text-center"
+          data-aos="fade-in"
+          data-aos-delay="120"
+          data-aos-duration="1000"
         >
           {/* Image Container with fixed height */}
           <div className="w-full h-24 mb-4 flex items-center justify-center">
@@ -77,7 +90,10 @@ export default function Research() {
           </div>
         </div>
         <div
-          className="bg-[#f7f9fc] p-6 rounded-lg shadow-sm flex flex-col items-center text-center"
+          className="flex flex-col items-center text-center"
+          data-aos="fade-left"
+          data-aos-delay="240"
+          data-aos-duration="1000"
         >
           {/* Image Container with fixed height */}
           <div className="w-full h-24 mb-4 flex items-center justify-center">
@@ -98,8 +114,6 @@ export default function Research() {
           </div>
         </div>
       </div>
-      
-
     </section>
   );
 }

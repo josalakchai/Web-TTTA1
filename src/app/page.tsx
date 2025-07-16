@@ -21,14 +21,13 @@ export default function Page() {
       <Navber />
       <Home />
       <Everyone />
+      <About />
       <Programs />
       <Partners />
       <Research />
       <Customers />
       {/* <Success /> */}
       <Performance />
-      
-      <About />
       <Values />
       <Team />
       <Contact />
