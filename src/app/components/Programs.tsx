@@ -3,7 +3,21 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import 'aos/dist/aos.css';
 
-const programs = [
+// Define a type for AOS to avoid 'any'
+type AOSStatic = {
+  init: (options?: { once?: boolean; duration?: number; offset?: number }) => void;
+  refreshHard?: () => void;
+};
+
+type Program = {
+  title: string;
+  description: string;
+  icon: string;
+  borderColor: string;
+  iconColor: string;
+};
+
+const programs: Program[] = [
   {
     title: 'Full-Stack Web Development',
     description:
@@ -48,7 +62,7 @@ const programs = [
 
 export default function Programs() {
   useEffect(() => {
-    let AOS: any;
+    let AOS: AOSStatic | undefined;
     const loadAOS = async () => {
       if (typeof window !== 'undefined') {
         const aosModule = await import('aos');
@@ -70,7 +84,7 @@ export default function Programs() {
   }, []);
 
   // ทุก card ขึ้นจากด้านล่าง (fade-up)
-  const getAosType = (_idx: number) => 'fade-up';
+  const getAosType = () => 'fade-up';
 
   return (
     <section id="programs" className="bg-[#f7f9fc] py-20 px-4 relative overflow-hidden">
@@ -86,9 +100,9 @@ export default function Programs() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
           {programs.map((program, idx) => (
             <div
-              key={idx}
+              key={program.title}
               className={`border ${program.borderColor} rounded-lg p-6 bg-white shadow-sm flex flex-col min-h-[320px]`}
-              data-aos={getAosType(idx)}
+              data-aos={getAosType()}
               data-aos-delay={100 * idx}
               data-aos-duration="1000"
             >

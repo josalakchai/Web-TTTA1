@@ -5,7 +5,7 @@ import 'aos/dist/aos.css';
 
 export default function About() {
   useEffect(() => {
-    let AOS: any;
+    let AOS: typeof import('aos') | undefined;
     const loadAOS = async () => {
       if (typeof window !== 'undefined') {
         const aosModule = await import('aos');
@@ -20,8 +20,9 @@ export default function About() {
     loadAOS();
 
     return () => {
-      if (AOS && typeof AOS.refreshHard === 'function') {
-        AOS.refreshHard();
+      // แก้ไขไม่ใช้ any
+      if (AOS && typeof (AOS as { refreshHard?: () => void }).refreshHard === 'function') {
+        (AOS as { refreshHard: () => void }).refreshHard();
       }
     };
   }, []);

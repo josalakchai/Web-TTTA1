@@ -1,6 +1,7 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
+import 'aos/dist/aos.css';
 
 const coreTeam = [
   {
@@ -90,12 +91,12 @@ const mentors = [
     image: '/010.png',
     quote: "Great engineers don't just write code—they solve problems that matter.",
   },
-  {
-    name: 'Miss. Pitchita Chumnankul',
-    title: 'CAD Designer',
-    image: '/.png',
-    quote: "Great engineers don't just write code—they solve problems that matter.",
-  },
+  // {
+  //   name: 'Miss. Pitchita Chumnankul',
+  //   title: 'CAD Designer',
+  //   image: '/.png',
+  //   quote: "Great engineers don't just write code—they solve problems that matter.",
+  // },
   {
     name: 'Mr.Sitthisak Phisanphiphak',
     title: 'Junior Backend Developer',
@@ -188,14 +189,22 @@ const Card = ({
   image,
   quote,
   socials,
+  aos,
+  aosDelay,
 }: {
   name: string;
   title: string;
   image: string;
   quote: string;
   socials?: string[];
+  aos?: string;
+  aosDelay?: number;
 }) => (
-  <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between">
+  <div
+    className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col justify-between"
+    data-aos={aos}
+    data-aos-delay={aosDelay}
+  >
     <div className="relative">
       <Image src={image} alt={name} className="h-60 w-full object-cover" width={1920} height={1920} />
       <div className="absolute bottom-0 left-0 w-full px-4 py-2 bg-gradient-to-t from-black/80 to-transparent text-white font-bold">
@@ -213,38 +222,88 @@ const Card = ({
 );
 
 export default function Team() {
+  useEffect(() => {
+    import('aos').then(AOS => {
+      AOS.init({
+        once: true,
+        duration: 800,
+        offset: 60,
+      });
+    });
+  }, []);
+
+  // Removed unused variables topMentors and bottomMentors
+
   return (
     <section id="team" className="bg-[#f7f9fc] py-12 md:py-20 px-4">
       <div className="max-w-7xl mx-auto text-center mb-8 md:mb-12">
-        <h2 className="text-3xl md:text-4xl font-bold text-[#011133]">Our Team & Mentors</h2>
-        <p className="text-base md:text-lg text-gray-600 mt-3 max-w-2xl mx-auto px-4">
+        <h2
+          className="text-3xl md:text-4xl font-bold text-[#011133]"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
+          Our Team & Mentors
+        </h2>
+        <p
+          className="text-base md:text-lg text-gray-600 mt-3 max-w-2xl mx-auto px-4"
+          data-aos="fade-up"
+          data-aos-delay="200"
+        >
           Meet the educators, innovators, and industry experts guiding the next generation of tech talent.
         </p>
       </div>
 
-      {/* Core Team */}
+      {/* Core Team (Co-Founder) */}
       <div className="max-w-7xl mx-auto mb-8 md:mb-12">
-        <h3 className="text-xl md:text-2xl font-bold text-[#011133] mb-6 text-center">Co-Founder</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 px-4">
+        <h3
+          className="text-xl md:text-2xl font-bold text-[#011133] mb-6 text-center"
+          data-aos="fade-up"
+          data-aos-delay="300"
+        >
+          Co-Founder
+        </h3>
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6 px-4">
           {coreTeam.map((member, idx) => (
-            <Card key={idx} {...member} />
+            <Card
+              key={idx}
+              {...member}
+              aos="zoom-in"
+              aosDelay={400 + idx * 100}
+            />
           ))}
         </div>
       </div>
 
-      {/* Industry Mentors */}
+      {/* Industry Mentors (Core Team) */}
       <div className="max-w-7xl mx-auto mb-8 md:mb-12">
-        <h3 className="text-xl md:text-2xl font-bold text-[#011133] mb-6 text-center">Core Team</h3>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 px-4">
+        <h3
+          className="text-xl md:text-2xl font-bold text-[#011133] mb-6 text-center"
+          data-aos="fade-up"
+          data-aos-delay="500"
+        >
+          Core Team
+        </h3>
+
+        {/* รวม mentor ทั้งหมดใน grid เดียวกัน */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-8 px-4">
           {mentors.map((mentor, idx) => (
-            <Card key={idx} {...mentor} />
+            <Card
+              key={idx}
+              {...mentor}
+              aos="fade-up"
+              aosDelay={600 + idx * 100}
+            />
           ))}
         </div>
       </div>
 
       {/* CTA */}
       <div className="mt-8 md:mt-12 text-center px-4">
-        <div className="inline-block bg-orange-100 text-orange-400 font-medium px-4 md:px-6 py-2 md:py-3 rounded-full text-base md:text-lg">
+        <div
+          className="inline-block bg-orange-100 text-orange-400 font-medium px-4 md:px-6 py-2 md:py-3 rounded-full text-base md:text-lg"
+          data-aos="zoom-in"
+          data-aos-delay="1200"
+        >
           Interested in becoming a mentor?&nbsp;
           <a href="#" className="underline font-bold text-orange-400">
             Contact us

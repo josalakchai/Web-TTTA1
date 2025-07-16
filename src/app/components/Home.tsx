@@ -28,6 +28,15 @@ export default function Home() {
         return () => clearTimeout(timer);
     }, []);
 
+    // ฟังก์ชันสำหรับ scroll แบบ smooth
+    const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+        e.preventDefault();
+        const target = document.getElementById('mission');
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
         <>
             {/* Animation CSS */}
@@ -129,13 +138,21 @@ export default function Home() {
                 </div>
 
                 {/* Scroll Indicator */}
-                <div className="hidden md:flex justify-center pb-2 animate-bounce cursor-pointer mt-8 sm:mt-[60px] lg:-mt-[0px] xl:mt-[80px]">
-                    <a href="#mission" className="text-xs sm:text-sm text-gray-500">
+                <div className="flex justify-center pb-2 animate-bounce cursor-pointer mt-8 sm:mt-[60px] lg:-mt-[0px] xl:mt-[80px]">
+                    <a
+                        href="#mission"
+                        className="text-xs sm:text-sm text-gray-500"
+                        onClick={handleSmoothScroll}
+                    >
                         Scroll to explore
                     </a>
                 </div>
-                <div className="hidden md:flex justify-center mb-6 sm:mb-8 animate-bounce cursor-pointer">
-                    <a href="#mission" className="text-gray-500">
+                <div className="flex justify-center mb-6 sm:mb-8 animate-bounce cursor-pointer">
+                    <a
+                        href="#mission"
+                        className="text-gray-500"
+                        onClick={handleSmoothScroll}
+                    >
                         <Image
                             src="icon20.svg"
                             alt='icon29'

@@ -3,7 +3,20 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import 'aos/dist/aos.css';
 
-const partners = [
+// Define a type for AOS to avoid 'any'
+type AOSStatic = {
+  init: (options?: { once?: boolean; duration?: number; offset?: number }) => void;
+  refreshHard?: () => void;
+};
+
+type Partner = {
+  name: string;
+  type: string;
+  image: string;
+  imgClass: string;
+};
+
+const partners: Partner[] = [
   {
     name: 'TechVenture Capital',
     type: 'Startup Accelerator',
@@ -26,7 +39,7 @@ const partners = [
 
 export default function Partners() {
   useEffect(() => {
-    let AOS: any;
+    let AOS: AOSStatic | undefined;
     const loadAOS = async () => {
       if (typeof window !== 'undefined') {
         const aosModule = await import('aos');
@@ -61,8 +74,8 @@ export default function Partners() {
       </div>
 
       {/* Partner Logos */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-w-4xl mx-auto">
-        {partners.map((partner, idx) => (
+      <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-3 gap-2 max-w-4xl mx-auto">
+        {partners.map((partner) => (
           <div
             key={partner.name}
             className="flex flex-col items-center text-center"

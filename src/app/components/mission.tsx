@@ -5,10 +5,16 @@ import Image from 'next/image';
 // Import AOS styles globally (if not already imported in _app or layout)
 import 'aos/dist/aos.css';
 
+// Define a type for AOS to avoid 'any'
+type AOSStatic = {
+    init: (options?: { once?: boolean; duration?: number; offset?: number }) => void;
+    refreshHard?: () => void;
+};
+
 const Everyone = () => {
     useEffect(() => {
         // Dynamically import AOS only on client side
-        let AOS: any;
+        let AOS: AOSStatic | undefined;
         const loadAOS = async () => {
             if (typeof window !== 'undefined') {
                 const aosModule = await import('aos');

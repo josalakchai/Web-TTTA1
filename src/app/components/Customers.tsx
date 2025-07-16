@@ -3,7 +3,14 @@ import React, { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import 'aos/dist/aos.css';
 
-const customers = [
+type Customer = {
+  src: string;
+  alt: string;
+  name: string;
+  desc: string;
+};
+
+const customers: Customer[] = [
   {
     src: '/Genie.png',
     alt: 'Genie',
@@ -49,19 +56,26 @@ const customers = [
 ];
 
 // Duplicate customers for seamless looping
-const loopCustomers = [...customers, ...customers];
+const loopCustomers: Customer[] = [...customers, ...customers];
+
+// Define a type for AOS options to avoid 'any'
+type AOSOptions = {
+  once?: boolean;
+  duration?: number;
+  offset?: number;
+};
 
 export default function Customers() {
   const sliderRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | null>(null);
 
   // For drag-to-scroll
-  const isDragging = useRef(false);
-  const startX = useRef(0);
-  const scrollLeft = useRef(0);
+  const isDragging = useRef<boolean>(false);
+  const startX = useRef<number>(0);
+  const scrollLeft = useRef<number>(0);
 
   // For image modal
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [modalImg, setModalImg] = useState<{ src: string; alt: string } | null>(null);
 
   // Fix: Track if mouse is outside window to always end drag
@@ -81,24 +95,29 @@ export default function Customers() {
 
   // AOS setup
   useEffect(() => {
-    let AOS: any;
+    // Define a type for the imported AOS module
+    type AOSModule = {
+      init: (opts: AOSOptions) => void;
+      refreshHard?: () => void;
+    };
+    let AOS: AOSModule | undefined;
     const loadAOS = async () => {
       if (typeof window !== 'undefined') {
         const aosModule = await import('aos');
         AOS = aosModule.default ? aosModule.default : aosModule;
-        AOS.init({
-          once: true,
-          duration: 900,
-          offset: 80,
-        });
+        if (AOS && typeof AOS.init === 'function') {
+          AOS.init({
+            once: true,
+            duration: 900,
+            offset: 80,
+          });
+        }
       }
     };
     loadAOS();
 
     return () => {
-      if (AOS && typeof AOS.refreshHard === 'function') {
-        AOS.refreshHard();
-      }
+      // No need to call AOS.refreshHard here, as AOS is not guaranteed to be available
     };
   }, []);
 
@@ -109,8 +128,8 @@ export default function Customers() {
     // Remove scrollbars (overflow button) via CSS
     slider.style.overflow = 'hidden';
 
-    let speed = 1.2; // px per frame, bigger for faster and more visible
-    let resetPoint = slider.scrollWidth / 2;
+    const speed = 1.2; // px per frame, bigger for faster and more visible
+    const resetPoint = slider.scrollWidth / 2;
 
     const animate = () => {
       if (!slider) return;
@@ -121,47 +140,29 @@ export default function Customers() {
           slider.scrollLeft = 0;
         }
       }
-      animationRef.current = requestAnimationFrame(animate);
+      animationRef.current = window.requestAnimationFrame(animate);
     };
 
-    animationRef.current = requestAnimationFrame(animate);
+    animationRef.current = window.requestAnimationFrame(animate);
 
     // Mouse events for drag-to-scroll
     const handleMouseDown = (e: MouseEvent) => {
-      // Prevent drag-to-scroll if mousedown is on an image (or its descendant)
-      // (Allow click to open modal instead)
-      // Only start drag if not on image
-      // e.target is the element clicked
-      // If it's an image or inside .customer-image-clickable, don't drag
-      let el = e.target as HTMLElement;
-      let isImage = false;
-      while (el && el !== slider) {
-        if (el.classList.contains('customer-image-clickable')) {
-          isImage = true;
-          break;
-        }
-        el = el.parentElement as HTMLElement;
-      }
-      if (isImage) return;
-
       isDragging.current = true;
-      slider.classList.add('cursor-grabbing');
+      if (slider) slider.classList.add('cursor-grabbing');
       startX.current = e.pageX - slider.offsetLeft;
       scrollLeft.current = slider.scrollLeft;
-
-      // Prevent text/image selection while dragging
       document.body.style.userSelect = 'none';
     };
 
     const handleMouseLeave = () => {
       isDragging.current = false;
-      slider.classList.remove('cursor-grabbing');
+      if (slider) slider.classList.remove('cursor-grabbing');
       document.body.style.userSelect = '';
     };
 
     const handleMouseUp = () => {
       isDragging.current = false;
-      slider.classList.remove('cursor-grabbing');
+      if (slider) slider.classList.remove('cursor-grabbing');
       document.body.style.userSelect = '';
     };
 
@@ -169,24 +170,12 @@ export default function Customers() {
       if (!isDragging.current) return;
       e.preventDefault();
       const x = e.pageX - slider.offsetLeft;
-      const walk = (x - startX.current) * 1.5; // scroll-fast
+      const walk = (x - startX.current) * 1.5;
       slider.scrollLeft = scrollLeft.current - walk;
     };
 
     // Touch events for mobile
     const handleTouchStart = (e: TouchEvent) => {
-      // Prevent drag-to-scroll if touchstart is on an image (or its descendant)
-      let el = e.target as HTMLElement;
-      let isImage = false;
-      while (el && el !== slider) {
-        if (el.classList.contains('customer-image-clickable')) {
-          isImage = true;
-          break;
-        }
-        el = el.parentElement as HTMLElement;
-      }
-      if (isImage) return;
-
       isDragging.current = true;
       startX.current = e.touches[0].pageX - slider.offsetLeft;
       scrollLeft.current = slider.scrollLeft;
@@ -215,14 +204,14 @@ export default function Customers() {
     // Also listen for mouseup on window to prevent stuck dragging
     const handleWindowMouseUp = () => {
       isDragging.current = false;
-      slider.classList.remove('cursor-grabbing');
+      if (slider) slider.classList.remove('cursor-grabbing');
       document.body.style.userSelect = '';
     };
     window.addEventListener('mouseup', handleWindowMouseUp);
 
     return () => {
       if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
+        window.cancelAnimationFrame(animationRef.current);
       }
       slider.removeEventListener('mousedown', handleMouseDown);
       slider.removeEventListener('mouseleave', handleMouseLeave);
@@ -248,52 +237,122 @@ export default function Customers() {
     return () => window.removeEventListener('keydown', handleKey);
   }, [modalOpen]);
 
+  // Responsive image size
+  const getImageSize = (): { width: number; height: number } => {
+    let width = 240;
+    let height = 192;
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth < 640) {
+        width = 140;
+        height = 100;
+      } else if (window.innerWidth < 1024) {
+        width = 180;
+        height = 140;
+      }
+    }
+    return { width, height };
+  };
+
+  const [imgSize, setImgSize] = useState<{ width: number; height: number }>(() => getImageSize());
+
+  useEffect(() => {
+    const handleResize = () => {
+      setImgSize(getImageSize());
+    };
+    window.addEventListener('resize', handleResize);
+    setImgSize(getImageSize());
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // --- Drag on image support ---
+  // We need to prevent click (open modal) if the user is dragging.
+  // We'll track if a drag happened between mousedown and mouseup/touchend.
+  const dragStarted = useRef<boolean>(false);
+
+  // Helper for image button: onMouseDown/onTouchStart
+  const handleImagePointerDown = () => {
+    dragStarted.current = false;
+  };
+
+  // Helper for image button: onMouseMove/onTouchMove
+  const handleImagePointerMove = () => {
+    dragStarted.current = true;
+  };
+
+  // Helper for image button: onClick
+  const handleImageClick = (customer: { src: string; alt: string }) => {
+    if (dragStarted.current) {
+      dragStarted.current = false;
+      return;
+    }
+    setModalImg({ src: customer.src, alt: customer.alt });
+    setModalOpen(true);
+  };
+
   return (
-    <section className="bg-white py-20 px-4">
+    <section className="bg-white py-12 px-2 sm:py-16 sm:px-4">
       {/* Title */}
       <div
-        className="max-w-7xl mx-auto text-center mb-12"
+        className="max-w-7xl mx-auto text-center mb-8 sm:mb-12"
         data-aos="fade-up"
       >
-        <h2 className="text-4xl font-bold text-[#011133]">Our Customers</h2>
-        <p className="text-gray-600 mt-3 max-w-3xl mx-auto">
-          Collaborating with industry leaders, academic institutions, and community<br /> organizations to provide the best opportunities for our students.
+        <h2 className="text-2xl sm:text-4xl font-bold text-[#011133]">Our Customers</h2>
+        <p className="text-gray-600 mt-3 max-w-3xl mx-auto text-sm sm:text-base">
+          Collaborating with industry leaders, academic institutions, and community<br className="hidden sm:inline" /> organizations to provide the best opportunities for our students.
         </p>
       </div>
 
       {/* Slider Gallery All Items Container */}
       <div
         ref={sliderRef}
-        className="slider-gallery-all-items-container flex gap-16 max-w-7xl mx-auto py-8 scrollbar-hide cursor-grab select-none"
+        className="slider-gallery-all-items-container flex gap-6 sm:gap-10 md:gap-16 max-w-full sm:max-w-7xl mx-auto py-4 sm:py-8 scrollbar-hide cursor-grab select-none"
         style={{
           scrollBehavior: 'auto',
-          overflow: 'hidden', // Hide overflow buttons/scrollbars
+          overflow: 'hidden',
           userSelect: 'none',
         }}
       >
         {loopCustomers.map((customer, idx) => (
           <div
             key={idx}
-            className="min-w-[360px] flex flex-col items-center text-center flex-shrink-0"
+            className="min-w-[160px] sm:min-w-[220px] md:min-w-[300px] lg:min-w-[360px] flex flex-col items-center text-center flex-shrink-0"
           >
             {/* Image Container with fixed height */}
-            <div className="w-full h-48 mb-6 flex items-center justify-center">
+            <div
+              className="w-full flex items-center justify-center mb-3 sm:mb-6"
+              style={{
+                height: imgSize.height,
+                minHeight: imgSize.height,
+                maxHeight: imgSize.height,
+              }}
+            >
               <button
                 type="button"
-                className="relative w-60 h-48 customer-image-clickable"
-                style={{ width: 240, height: 192, padding: 0, border: 'none', background: 'none', cursor: 'pointer' }}
+                className="relative customer-image-clickable"
+                style={{
+                  width: imgSize.width,
+                  height: imgSize.height,
+                  padding: 0,
+                  border: 'none',
+                  background: 'none',
+                  cursor: 'pointer',
+                }}
                 tabIndex={0}
                 onClick={e => {
                   e.stopPropagation();
-                  setModalImg({ src: customer.src, alt: customer.alt });
-                  setModalOpen(true);
+                  handleImageClick(customer);
                 }}
-                onMouseDown={e => {
-                  // Prevent drag-to-scroll from starting if mousedown is on image
-                  e.stopPropagation();
+                onMouseDown={() => {
+                  handleImagePointerDown();
                 }}
-                onTouchStart={e => {
-                  e.stopPropagation();
+                onMouseMove={() => {
+                  handleImagePointerMove();
+                }}
+                onTouchStart={() => {
+                  handleImagePointerDown();
+                }}
+                onTouchMove={() => {
+                  handleImagePointerMove();
                 }}
               >
                 <Image
@@ -301,16 +360,16 @@ export default function Customers() {
                   alt={customer.alt}
                   fill
                   className="object-contain"
-                  sizes="240px"
+                  sizes={`${imgSize.width}px`}
                   draggable={false}
                   priority={idx < 7}
                 />
               </button>
             </div>
-            {/* Text */}
-            {/* <div className="min-h-[60px] flex flex-col justify-center">
-              <h3 className="text-[#011133] font-semibold">{customer.name}</h3>
-              <p className="text-gray-500 text-sm">{customer.desc}</p>
+            {/* Text (optional, hidden on mobile for compactness) */}
+            {/* <div className="min-h-[40px] sm:min-h-[60px] flex flex-col justify-center">
+              <h3 className="text-[#011133] font-semibold text-xs sm:text-base">{customer.name}</h3>
+              <p className="text-gray-500 text-xs sm:text-sm">{customer.desc}</p>
             </div> */}
           </div>
         ))}
@@ -324,8 +383,12 @@ export default function Customers() {
           style={{ cursor: 'zoom-out' }}
         >
           <div
-            className="relative bg-white rounded-lg shadow-lg p-4"
-            style={{ maxWidth: 600, maxHeight: '90vh' }}
+            className="relative bg-white rounded-lg shadow-lg p-2 sm:p-4"
+            style={{
+              maxWidth: '95vw',
+              maxHeight: '90vh',
+              width: '100%',
+            }}
             onClick={e => e.stopPropagation()}
           >
             <button
@@ -336,13 +399,27 @@ export default function Customers() {
             >
               ×
             </button>
-            <div className="flex items-center justify-center" style={{ minWidth: 500, minHeight: 500 }}>
+            <div
+              className="flex items-center justify-center"
+              style={{
+                minWidth: 0,
+                minHeight: 0,
+                width: '80vw',
+                height: '60vw',
+                maxWidth: 500,
+                maxHeight: 500,
+              }}
+            >
               <Image
                 src={modalImg.src}
                 alt={modalImg.alt}
-                width={400}
-                height={400}
-                style={{ maxWidth: '90vw', maxHeight: '70vh', objectFit: 'contain' }}
+                width={imgSize.width * 2}
+                height={imgSize.height * 2}
+                style={{
+                  maxWidth: '90vw',
+                  maxHeight: '70vh',
+                  objectFit: 'contain',
+                }}
                 className="rounded"
                 priority
               />

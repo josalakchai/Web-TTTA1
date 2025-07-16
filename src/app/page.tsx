@@ -26,7 +26,6 @@ export default function Page() {
       <Partners />
       <Research />
       <Customers />
-      {/* <Success /> */}
       <Performance />
       <Values />
       <Team />

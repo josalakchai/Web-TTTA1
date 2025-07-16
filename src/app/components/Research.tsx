@@ -3,9 +3,15 @@ import React, { useEffect } from 'react';
 import Image from 'next/image';
 import 'aos/dist/aos.css';
 
+// Define a type for AOS to avoid 'any'
+type AOSStatic = {
+  init: (options?: { once?: boolean; duration?: number; offset?: number }) => void;
+  refreshHard?: () => void;
+};
+
 export default function Research() {
   useEffect(() => {
-    let AOS: any;
+    let AOS: AOSStatic | undefined;
     const loadAOS = async () => {
       if (typeof window !== 'undefined') {
         const aosModule = await import('aos');
@@ -40,10 +46,10 @@ export default function Research() {
       </div>
 
       {/* Partner Logos */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+      <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         <div
           className="flex flex-col items-center text-center"
-          data-aos="fade-right"
+          data-aos="fade-down"
           data-aos-delay="0"
           data-aos-duration="1000"
         >
@@ -58,16 +64,10 @@ export default function Research() {
               />
             </div>
           </div>
-
-          {/* Text */}
-          {/* <div className="min-h-[60px] flex flex-col justify-center">
-            <h3 className="text-[#011133] font-semibold">---</h3>
-            <p className="text-gray-500 text-sm">---</p>
-          </div> */}
         </div>
         <div
           className="flex flex-col items-center text-center"
-          data-aos="fade-in"
+          data-aos="fade-up"
           data-aos-delay="120"
           data-aos-duration="1000"
         >
@@ -82,16 +82,10 @@ export default function Research() {
               />
             </div>
           </div>
-
-          {/* Text */}
-          {/* <div className="min-h-[60px] flex flex-col justify-center">
-            <h3 className="text-[#011133] font-semibold">---</h3>
-            <p className="text-gray-500 text-sm">---</p>
-          </div> */}
         </div>
         <div
           className="flex flex-col items-center text-center"
-          data-aos="fade-left"
+          data-aos="fade-down"
           data-aos-delay="240"
           data-aos-duration="1000"
         >
@@ -106,12 +100,6 @@ export default function Research() {
               />
             </div>
           </div>
-
-          {/* Text */}
-          {/* <div className="min-h-[60px] flex flex-col justify-center">
-            <h3 className="text-[#011133] font-semibold">---</h3>
-            <p className="text-gray-500 text-sm">---</p>
-          </div> */}
         </div>
       </div>
     </section>
