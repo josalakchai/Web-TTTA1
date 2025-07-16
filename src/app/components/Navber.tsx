@@ -5,9 +5,9 @@ import Image from 'next/image'
 import { Menu, X } from 'lucide-react'
 
 const NAV_LINKS = [
-  { href: "#mission", label: "Mission" },
-  { href: "#programs", label: "Programs" },
+  { href: "#mission", label: "Mission" },  
   { href: "#about", label: "About" },
+  { href: "#programs", label: "Programs" },
   { href: "#team", label: "Team" },
   { href: "#contact", label: "Contact" },
 ]

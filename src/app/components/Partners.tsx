@@ -61,7 +61,7 @@ export default function Partners() {
       </div>
 
       {/* Partner Logos */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 max-w-4xl mx-auto">
         {partners.map((partner, idx) => (
           <div
             key={partner.name}
@@ -80,11 +80,11 @@ export default function Partners() {
               </div>
             </div>
 
-            {/* Text */}
+            {/* Text
             <div className="min-h-[60px] flex flex-col justify-center">
               <h3 className="text-[#011133] font-semibold">{partner.name}</h3>
               <p className="text-gray-500 text-sm">{partner.type}</p>
-            </div>
+            </div> */}
           </div>
         ))}
       </div>

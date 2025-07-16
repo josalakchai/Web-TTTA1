@@ -1,6 +1,7 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
+import 'aos/dist/aos.css';
 
 const values = [
   {
@@ -36,20 +37,38 @@ const values = [
 ];
 
 export default function Values() {
+  // AOS setup
+  useEffect(() => {
+    import('aos').then(AOS => {
+      AOS.init({
+        once: true,
+        duration: 800,
+        offset: 60,
+      });
+    });
+  }, []);
+
+  // Split values: top 3, then 2
+  const topValues = values.slice(0, 3);
+  const bottomValues = values.slice(3);
+
   return (
     <section className="bg-white py-20 px-4">
-      <div className="text-center mb-16 max-w-3xl mx-auto">
+      <div className="text-center mb-16 max-w-3xl mx-auto" data-aos="fade-up">
         <h2 className="text-4xl font-bold text-[#011133] mb-4">Our Values</h2>
         <p className="text-gray-600">
           The core principles that guide our educational approach and community.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
-        {values.map((value, idx) => (
+      {/* Top 3 values */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-8">
+        {topValues.map((value, idx) => (
           <div
             key={idx}
             className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition"
+            data-aos="fade-up"
+            data-aos-delay={100 * (idx + 1)}
           >
             <div className="flex flex-col gap-4">
               <div className="bg-orange-100 w-14 h-14 rounded-full flex items-center justify-center">
@@ -64,9 +83,37 @@ export default function Values() {
         ))}
       </div>
 
+      {/* Bottom 2 values centered */}
+      <div className="flex justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl w-full">
+          {bottomValues.map((value, idx) => (
+            <div
+              key={idx}
+              className="bg-white rounded-lg p-6 shadow-sm hover:shadow-md transition"
+              data-aos="fade-up"
+              data-aos-delay={400 + 100 * idx}
+            >
+              <div className="flex flex-col gap-4">
+                <div className="bg-orange-100 w-14 h-14 rounded-full flex items-center justify-center">
+                  <Image src={value.icon} alt={value.title} width={24} height={24} className="text-orange-500" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-[#011133] mb-2">{value.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{value.description}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Quote */}
       <div className="flex justify-center mt-12">
-        <div className="bg-gray-200 text-[#011133] px-6 py-3 rounded-full text-center text-1xl font-medium max-w-xl">
+        <div
+          className="bg-gray-200 text-[#011133] px-6 py-3 rounded-full text-center text-1xl font-medium max-w-xl"
+          data-aos="zoom-in"
+          data-aos-delay="600"
+        >
           &quot;Technology in service of humanity, innovation in service of community.&quot;
         </div>
       </div>

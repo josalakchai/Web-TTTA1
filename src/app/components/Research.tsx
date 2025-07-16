@@ -60,10 +60,10 @@ export default function Research() {
           </div>
 
           {/* Text */}
-          <div className="min-h-[60px] flex flex-col justify-center">
+          {/* <div className="min-h-[60px] flex flex-col justify-center">
             <h3 className="text-[#011133] font-semibold">---</h3>
             <p className="text-gray-500 text-sm">---</p>
-          </div>
+          </div> */}
         </div>
         <div
           className="flex flex-col items-center text-center"
@@ -84,10 +84,10 @@ export default function Research() {
           </div>
 
           {/* Text */}
-          <div className="min-h-[60px] flex flex-col justify-center">
+          {/* <div className="min-h-[60px] flex flex-col justify-center">
             <h3 className="text-[#011133] font-semibold">---</h3>
             <p className="text-gray-500 text-sm">---</p>
-          </div>
+          </div> */}
         </div>
         <div
           className="flex flex-col items-center text-center"
@@ -108,10 +108,10 @@ export default function Research() {
           </div>
 
           {/* Text */}
-          <div className="min-h-[60px] flex flex-col justify-center">
+          {/* <div className="min-h-[60px] flex flex-col justify-center">
             <h3 className="text-[#011133] font-semibold">---</h3>
             <p className="text-gray-500 text-sm">---</p>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
