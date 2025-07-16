@@ -298,7 +298,7 @@ export default function Customers() {
       >
         <h2 className="text-2xl sm:text-4xl font-bold text-[#011133]">Our Customers</h2>
         <p className="text-gray-600 mt-3 max-w-3xl mx-auto text-sm sm:text-base">
-          Collaborating with industry leaders, academic institutions, and community<br className="hidden sm:inline" /> organizations to provide the best opportunities for our students.
+        Partnering with organizations and individuals to deliver solutions that meet real-world needs and drive lasting value.
         </p>
       </div>
 
@@ -359,7 +359,7 @@ export default function Customers() {
                   src={customer.src}
                   alt={customer.alt}
                   fill
-                  className="object-contain"
+                  className="object-contain rounded-lg"
                   sizes={`${imgSize.width}px`}
                   draggable={false}
                   priority={idx < 7}
@@ -378,53 +378,40 @@ export default function Customers() {
       {/* Modal for image preview */}
       {modalOpen && modalImg && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
+          className="fixed inset-0 z-50 flex items-center justify-center"
           onClick={() => setModalOpen(false)}
-          style={{ cursor: 'zoom-out' }}
+          style={{
+            cursor: 'zoom-out',
+            background: 'transparent',
+          }}
         >
-          <div
-            className="relative bg-white rounded-lg shadow-lg p-2 sm:p-4"
-            style={{
-              maxWidth: '95vw',
-              maxHeight: '90vh',
-              width: '100%',
-            }}
-            onClick={e => e.stopPropagation()}
+          <button
+            className="absolute top-2 right-2 text-gray-700 hover:text-black text-2xl font-bold"
+            onClick={() => setModalOpen(false)}
+            aria-label="Close"
+            style={{ background: 'none', border: 'none', cursor: 'pointer', zIndex: 10 }}
           >
-            <button
-              className="absolute top-2 right-2 text-gray-700 hover:text-black text-2xl font-bold"
-              onClick={() => setModalOpen(false)}
-              aria-label="Close"
-              style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-            >
-              ×
-            </button>
-            <div
-              className="flex items-center justify-center"
-              style={{
-                minWidth: 0,
-                minHeight: 0,
-                width: '80vw',
-                height: '60vw',
-                maxWidth: 500,
-                maxHeight: 500,
-              }}
-            >
-              <Image
-                src={modalImg.src}
-                alt={modalImg.alt}
-                width={imgSize.width * 2}
-                height={imgSize.height * 2}
-                style={{
-                  maxWidth: '90vw',
-                  maxHeight: '70vh',
-                  objectFit: 'contain',
-                }}
-                className="rounded"
-                priority
-              />
-            </div>
-          </div>
+            ×
+          </button>
+          <Image
+            src={modalImg.src}
+            alt={modalImg.alt}
+            width={imgSize.width * 2}
+            height={imgSize.height * 2}
+            style={{
+              maxWidth: '90vw',
+              maxHeight: '80vh',
+              objectFit: 'contain',
+              margin: 'auto',
+              display: 'block',
+              boxShadow: '0 2px 16px rgba(0,0,0,0.15)',
+              borderRadius: '12px',
+              background: 'transparent',
+            }}
+            className="rounded"
+            priority
+            onClick={e => e.stopPropagation()}
+          />
         </div>
       )}
     </section>

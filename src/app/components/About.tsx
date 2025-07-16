@@ -50,14 +50,14 @@ export default function About() {
             We believe that technology is a powerful tool for national development and individual empowerment. By equipping our students with both technical skills and an innovative mindset, we&apos;re helping build a future where technology serves humanity and creates opportunities for all.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4">
+          {/* <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4">
             <button className="w-full sm:w-auto bg-[#F7931B] hover:bg-orange-600 transition text-white text-sm px-6 sm:px-5 py-3 rounded-md">
               Our Mission & Vision
             </button>
             <button className="w-full sm:w-auto border border-[#011133] text-[#011133] text-sm px-6 sm:px-5 py-3 rounded-md hover:bg-[#011133] hover:text-white transition">
               Academy Timeline
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* RIGHT - Image + Quote */}

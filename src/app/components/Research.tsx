@@ -41,7 +41,7 @@ export default function Research() {
       >
         <h2 className="text-4xl font-bold text-[#011133]">Join Our Research</h2>
         <p className="text-gray-600 mt-3 max-w-3xl mx-auto">
-          Collaborating with industry leaders, academic institutions, and community<br /> organizations to provide the best opportunities for our students.
+        Collaborating with researchers, institutions, and industry experts to drive innovation and create impactful discoveries.
         </p>
       </div>
 

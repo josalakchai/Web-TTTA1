@@ -27,7 +27,7 @@ export default function Page() {
       <Research />
       <Customers />
       <Performance />
-      <Values />
+      {/* <Values /> */}
       <Team />
       <Contact />
       <Footer />

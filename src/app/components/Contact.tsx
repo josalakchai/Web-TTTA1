@@ -34,18 +34,18 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="bg-[#f7f9fc] py-20 px-4 relative overflow-hidden"
+      className="bg-white py-20 px-4 relative overflow-hidden"
     >
-      <div
+      {/* <div
         className="absolute -top-[70px] -right-[60px] w-[300px] h-[300px] bg-[#F7931B] opacity-[0.05] rounded-full"
         data-aos="fade-down"
         data-aos-delay="200"
-      ></div>
-      <div
+      ></div> */}
+      {/* <div
         className="absolute -bottom-[100px] -left-[60px] w-[320px] h-[320px] bg-[#011133] opacity-[0.05] rounded-full"
         data-aos="fade-up"
         data-aos-delay="200"
-      ></div>
+      ></div> */}
       {/* Title */}
       <div className="text-center max-w-2xl mx-auto mb-12" data-aos="fade-down" data-aos-delay="100">
         <h2 className="text-3xl md:text-4xl font-bold text-[#011133]">Contact Us</h2>
@@ -98,7 +98,7 @@ export default function Contact() {
             </div>
             <div>
               <p className="font-bold text-[#011133]">Phone</p>
-              <p className="text-gray-600 text-sm">+1 (555) 123-4567</p>
+              <p className="text-gray-600 text-sm">093-395-9550</p>
             </div>
           </div>
 

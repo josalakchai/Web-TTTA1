@@ -33,7 +33,10 @@ export default function Home() {
         e.preventDefault();
         const target = document.getElementById('mission');
         if (target) {
-            target.scrollIntoView({ behavior: 'smooth' });
+            // Scroll with offset for navbar height (e.g., 80px)
+            const yOffset = -80;
+            const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
         }
     };
 
@@ -75,7 +78,8 @@ export default function Home() {
                 }
                 `}
             </style>
-            <div id='home' className="min-h-screen bg-gradient-to-br from-white flex flex-col items-center justify-center px-4 sm:px-6 mt-[40px]">
+            {/* Add pt-[80px] to offset for navbar height */}
+            <div id='home' className="min-h-screen bg-gradient-to-br from-white flex flex-col items-center justify-center px-4 sm:px-6 pt-[80px] mt-12">
                 {/* Section Container */}
                 <div className="max-w-7xl w-full grid lg:grid-cols-2 gap-8 md:gap-12 items-center lg:mt-[135px]">
 
