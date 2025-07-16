@@ -13,6 +13,7 @@ import Team from './components/Team';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import BackToTop from './components/Backtotop';
+import Research from './components/Research';
 
 export default function Page() {
   return (
@@ -21,10 +22,12 @@ export default function Page() {
       <Home />
       <Everyone />
       <Programs />
+      <Partners />
+      <Research />
       <Customers />
       {/* <Success /> */}
       <Performance />
-      <Partners />
+      
       <About />
       <Values />
       <Team />

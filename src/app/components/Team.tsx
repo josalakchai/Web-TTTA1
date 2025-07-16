@@ -20,7 +20,7 @@ const coreTeam = [
   {
     name: 'Aisha Patel',
     title: 'Startup Coach',
-    image: '/07mt.jpg',
+    image: '/07mt.png',
     quote: "Great startups begin with a problem worth solving, not just a product worth building.",
     socials: ['linkedin', 'twitter'],
   },
