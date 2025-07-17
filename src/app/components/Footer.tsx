@@ -92,7 +92,7 @@ export default function Footer() {
       <div
         className="border-t border-[#1e2a4b] py-6 px-4 flex flex-col md:flex-row justify-center items-center max-w-7xl mx-auto text-1xl text-gray-400"
       >
-        <p>© 2025 Tiger Team Academy. All rights reserved.</p>
+        <p>© 2025 The Tiger Team Academy. All rights reserved.</p>
       </div>
     </footer>
   );
