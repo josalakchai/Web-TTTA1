@@ -61,28 +61,22 @@ export default function About() {
         </div>
 
         {/* RIGHT - Image + Quote */}
-        <div className="relative" data-aos="fade-zoom-in" data-aos-duration="2000">
-          {/* วงกลมพื้นหลังด้านขวา (สีส้ม) */}
-          <div className="absolute -top-4 -right-6 w-[100px] h-[60px] bg-[#F7931B] shadow-lg rounded-lg px-4 py-3 flex items-center gap-3 z-0"></div>
-          {/* วงกลมพื้นหลังด้านซ้าย (สีน้ำเงิน/คราม) */}
-          <div className="absolute -bottom-5 -left-6 w-[100px] h-[60px] bg-[#011133] shadow-lg rounded-lg px-4 py-3 flex items-center gap-3 z-0"></div>
-
-          <Image
-            src="/Team.png"
-            alt="Students at Tiger Team Academy"
-            className="rounded-lg shadow-lg relative z-10"
-            width={620}
-            height={24}
-          />
-
-          {/* Quote Box
-          <div className="absolute sm:bottom-[-40px] md:-bottom-[180px] lg:-bottom-30 xl:-bottom-10 sm:right-[-10px] bottom-[-80px] right-0 bg-white shadow-xl rounded-lg p-4 sm:p-6 w-[90%] sm:w-full sm:max-w-xs mx-auto">
-            <p className="italic text-gray-700 mb-2 sm:mb-3 text-sm sm:text-base">
-              &ldquo;We&apos;re not just teaching code—we&apos;re nurturing the next generation of leaders who will use technology to transform our world.&rdquo;
-            </p>
-            <p className="font-bold text-[#011133] text-sm sm:text-base">Prof. James Chen</p>
-            <p className="text-xs sm:text-sm text-gray-600">Founder & Academic Director</p>
-          </div> */}
+        <div className="relative z-10 flex justify-center items-center">
+          <div className="relative w-full max-w-[420px] sm:max-w-[500px] md:max-w-[420px] lg:max-w-[480px] mx-auto px-2 sm:px-4 md:px-0" data-aos="fade-zoom-in" data-aos-duration="2000">
+            {/* Top Right Box */}
+            <div className="absolute w-[70px] h-[40px] sm:w-[90px] sm:h-[54px] md:w-[100px] md:h-[60px] -top-3 -right-3 sm:-top-4 sm:-right-4 md:-top-4 md:-right-6 bg-[#011133] shadow-lg rounded-lg px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 flex items-center gap-2 sm:gap-3 z-0"></div>
+            {/* Bottom Left Box */}
+            <div className="absolute w-[70px] h-[40px] sm:w-[90px] sm:h-[54px] md:w-[100px] md:h-[60px] -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 md:-bottom-5 md:-left-6 bg-[#F7931B] shadow-lg rounded-lg px-2 sm:px-3 md:px-4 py-2 sm:py-2.5 md:py-3 flex items-center gap-2 sm:gap-3 z-0"></div>
+            <Image
+              src="/Team.png"
+              alt="Students at Tiger Team Academy"
+              className="rounded-xl w-full shadow-md relative z-10 object-cover"
+              width={684}
+              height={456}
+              sizes="(max-width: 768px) 100vw, 420px"
+              priority
+            />
+          </div>
         </div>
       </div>
     </section>
