@@ -29,16 +29,16 @@ export default function Home() {
     }, []);
 
     // ฟังก์ชันสำหรับ scroll แบบ smooth
-    const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-        e.preventDefault();
-        const target = document.getElementById('mission');
-        if (target) {
-            // Scroll with offset for navbar height (e.g., 80px)
-            const yOffset = -80;
-            const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
-            window.scrollTo({ top: y, behavior: 'smooth' });
-        }
-    };
+    // const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    //     e.preventDefault();
+    //     const target = document.getElementById('mission');
+    //     if (target) {
+    //         // Scroll with offset for navbar height (e.g., 80px)
+    //         const yOffset = -80;
+    //         const y = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    //         window.scrollTo({ top: y, behavior: 'smooth' });
+    //     }
+    // };
 
     return (
         <>
