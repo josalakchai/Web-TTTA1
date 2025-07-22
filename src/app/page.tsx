@@ -12,7 +12,7 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import BackToTop from './components/Backtotop';
 import Research from './components/Research';
-import Event from './components/Event';
+// import Event from './components/Event';
 
 export default function Page() {
   return (
@@ -27,7 +27,7 @@ export default function Page() {
       <Customers />
       <Performance />
       <Team />
-      <Event />
+      {/* <Event /> */}
       <Contact />
       <Footer />
       <BackToTop />
