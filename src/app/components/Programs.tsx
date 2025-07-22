@@ -1,8 +1,23 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
+import 'aos/dist/aos.css';
 
-const programs = [ 
+// Define a type for AOS to avoid 'any'
+type AOSStatic = {
+  init: (options?: { once?: boolean; duration?: number; offset?: number }) => void;
+  refreshHard?: () => void;
+};
+
+type Program = {
+  title: string;
+  description: string;
+  icon: string;
+  borderColor: string;
+  iconColor: string;
+};
+
+const programs: Program[] = [
   {
     title: 'Full-Stack Web Development',
     description:
@@ -23,7 +38,7 @@ const programs = [
     title: 'Machine Learning and AI',
     description:
       'Dive into AI algorithms, neural networks, and data science. Train models that solve real-world problems and drive innovation.',
-      icon: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>',
+    icon: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>',
     borderColor: 'border-blue-500',
     iconColor: 'bg-blue-500',
   },
@@ -46,10 +61,35 @@ const programs = [
 ];
 
 export default function Programs() {
+  useEffect(() => {
+    let AOS: AOSStatic | undefined;
+    const loadAOS = async () => {
+      if (typeof window !== 'undefined') {
+        const aosModule = await import('aos');
+        AOS = aosModule.default ? aosModule.default : aosModule;
+        AOS.init({
+          once: true,
+          duration: 900,
+          offset: 80,
+        });
+      }
+    };
+    loadAOS();
+
+    return () => {
+      if (AOS && typeof AOS.refreshHard === 'function') {
+        AOS.refreshHard();
+      }
+    };
+  }, []);
+
+  // ทุก card ขึ้นจากด้านล่าง (fade-up)
+  const getAosType = () => 'fade-up';
+
   return (
-    <section id="programs" className="bg-[#f7f9fc] py-20 px-4">
+    <section id="programs" className="bg-[#f7f9fc] py-20 px-4 relative overflow-hidden">
       <div id="our-programs" className="absolute -mt-[160px]"></div>
-      <div className="max-w-7xl mx-auto text-center mb-12">
+      <div className="max-w-7xl mx-auto text-center mb-12" data-aos="fade-zoom-in" data-aos-duration="2000">
         <h2 className="text-4xl font-bold text-[#011133] md:text-5xl">Our Programs</h2>
         <p className="text-gray-600 mt-3 max-w-2xl mx-auto text-sm md:text-base">
           Comprehensive educational tracks designed to transform beginners into industry-ready professionals and innovators.
@@ -57,14 +97,17 @@ export default function Programs() {
       </div>
 
       <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 sm:gap-3 md:gap-4">
           {programs.map((program, idx) => (
             <div
-              key={idx}
-              className={`border ${program.borderColor} rounded-lg p-6 bg-white shadow-sm flex flex-col min-h-[320px]`}
+              key={program.title}
+              className={`border ${program.borderColor} rounded-lg p-4 sm:p-5 md:p-6 bg-white shadow-sm flex flex-col min-h-[280px] sm:min-h-[300px]`}
+              data-aos={getAosType()}
+              data-aos-delay={100 * idx}
+              data-aos-duration="1000"
             >
               <div>
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${program.iconColor} mb-4`}>
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center ${program.iconColor} mb-3`}>
                   <Image
                     src={program.icon}
                     alt={program.title}
@@ -73,8 +116,8 @@ export default function Programs() {
                     className="text-white"
                   />
                 </div>
-                <h3 className="text-xl font-bold text-[#011133] mb-2">{program.title}</h3>
-                <p className="text-gray-600 text-sm line-clamp-6">{program.description}</p>
+                <h3 className="text-lg sm:text-xl font-bold text-[#011133] mb-1 sm:mb-2">{program.title}</h3>
+                <p className="text-gray-600 text-sm sm:text-[15px] line-clamp-6">{program.description}</p>
               </div>
             </div>
           ))}

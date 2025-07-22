@@ -19,14 +19,39 @@ export default function BackToTop() {
   };
 
   return (
-    visible && (
-      <button
-        onClick={scrollToTop}
-        className="fixed bottom-6 right-6 bg-orange-400 text-white p-4 rounded-full shadow-lg hover:bg-orange-400 transition"
-        aria-label="Scroll to top"
-      >
-        <ArrowUp size={20} />
-      </button>
-    )
+    <div
+      style={{
+        position: 'fixed',
+        zIndex: 9999,
+        bottom: 0,
+        right: 0,
+        width: '100vw',
+        pointerEvents: 'none',
+      }}
+    >
+      {visible && (
+        <button
+          onClick={scrollToTop}
+          aria-label="Scroll to top"
+          className="
+            pointer-events-auto
+            bg-orange-400 text-white rounded-full shadow-lg
+            fixed
+            bottom-4 right-4
+            sm:bottom-6 sm:right-6
+            p-3 sm:p-4
+            hover:bg-orange-500
+            transition
+            focus:outline-none focus:ring-2 focus:ring-orange-300
+          "
+          style={{
+            zIndex: 9999,
+          }}
+        >
+          <ArrowUp size={24} className="hidden sm:inline" />
+          <ArrowUp size={18} className="inline sm:hidden" />
+        </button>
+      )}
+    </div>
   );
 }

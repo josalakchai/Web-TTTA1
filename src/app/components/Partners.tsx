@@ -1,35 +1,72 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
+import 'aos/dist/aos.css';
 
-// const partners = [
-//   {
-//     name: 'TechVenture Capital',
-//     type: 'Startup Accelerator',
-//     image: '/Pant2.png',
-//   },
-//   {
-//     name: 'Global AI Institute',
-//     type: 'Research Partner',
-//     image: '/Pant1.png',
-//   },
-//   {
-//     name: 'EduTech Foundation',
-//     type: 'NGO Partner',
-//     image: '/.png',
-//   },
-//   {
-//     name: 'National University',
-//     type: 'Academic Partner',
-//     image: '/.png',
-//   },
-// ];
+// Define a type for AOS to avoid 'any'
+type AOSStatic = {
+  init: (options?: { once?: boolean; duration?: number; offset?: number }) => void;
+  refreshHard?: () => void;
+};
+
+type Partner = {
+  name: string;
+  type: string;
+  image: string;
+  imgClass: string;
+};
+
+const partners: Partner[] = [
+  {
+    name: 'TechVenture Capital',
+    type: 'Startup Accelerator',
+    image: '/Pant2.png',
+    imgClass: 'w-40 h-40',
+  },
+  {
+    name: 'Global AI Institute',
+    type: 'Research Partner',
+    image: '/Pant1.png',
+    imgClass: 'w-20 h-20',
+  },
+  {
+    name: 'Promlab',
+    type: 'Innovation Lab',
+    image: '/Promlab.png',
+    imgClass: 'w-40 h-40 rounded-lg',
+  },
+];
 
 export default function Partners() {
+  useEffect(() => {
+    let AOS: AOSStatic | undefined;
+    const loadAOS = async () => {
+      if (typeof window !== 'undefined') {
+        const aosModule = await import('aos');
+        AOS = aosModule.default ? aosModule.default : aosModule;
+        AOS.init({
+          once: true,
+          duration: 900,
+          offset: 80,
+        });
+      }
+    };
+    loadAOS();
+
+    return () => {
+      if (AOS && typeof AOS.refreshHard === 'function') {
+        AOS.refreshHard();
+      }
+    };
+  }, []);
+
   return (
     <section className="bg-white py-20 px-4">
       {/* Title */}
-      <div className="max-w-7xl mx-auto text-center mb-12">
+      <div
+        className="max-w-7xl mx-auto text-center mb-12"
+        data-aos="fade-up"
+      >
         <h2 className="text-4xl font-bold text-[#011133]">Our Partners</h2>
         <p className="text-gray-600 mt-3 max-w-3xl mx-auto">
           Collaborating with industry leaders, academic institutions, and community<br /> organizations to provide the best opportunities for our students.
@@ -37,91 +74,32 @@ export default function Partners() {
       </div>
 
       {/* Partner Logos */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
-        <div
-          className="bg-[#f7f9fc] p-6 rounded-lg shadow-sm flex flex-col items-center text-center"
-        >
-          {/* Image Container with fixed height */}
-          <div className="w-full h-24 mb-4 flex items-center justify-center">
-            <div className="relative w-30 h-30">
-              <Image
-                src='/Pant2.png'
-                alt=''
-                fill
-                className="object-contain"
-              />
+      <div className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-3 gap-2 max-w-4xl mx-auto">
+        {partners.map((partner) => (
+          <div
+            key={partner.name}
+            className="flex flex-col items-center text-center"
+          >
+            {/* Image Container with fixed height */}
+            <div className="w-full h-24 mb-4 flex items-center justify-center">
+              <div className={`relative ${partner.imgClass}`}>
+                <Image
+                  src={partner.image}
+                  alt={partner.name}
+                  fill
+                  className="object-contain"
+                  style={partner.imgClass.includes('rounded-lg') ? { borderRadius: '0.5rem' } : {}}
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Text */}
-          <div className="min-h-[60px] flex flex-col justify-center">
-            <h3 className="text-[#011133] font-semibold">---</h3>
-            <p className="text-gray-500 text-sm">---</p>
+            {/* Text
+            <div className="min-h-[60px] flex flex-col justify-center">
+              <h3 className="text-[#011133] font-semibold">{partner.name}</h3>
+              <p className="text-gray-500 text-sm">{partner.type}</p>
+            </div> */}
           </div>
-        </div>
-        <div
-          className="bg-[#f7f9fc] p-6 rounded-lg shadow-sm flex flex-col items-center text-center"
-        >
-          {/* Image Container with fixed height */}
-          <div className="w-full h-24 mb-4 flex items-center justify-center">
-            <div className="relative w-20 h-20">
-              <Image
-                src='/Pant1.png'
-                alt=''
-                fill
-                className="object-contain"
-              />
-            </div>
-          </div>
-
-          {/* Text */}
-          <div className="min-h-[60px] flex flex-col justify-center">
-            <h3 className="text-[#011133] font-semibold">---</h3>
-            <p className="text-gray-500 text-sm">---</p>
-          </div>
-        </div>
-        <div
-          className="bg-[#f7f9fc] p-6 rounded-lg shadow-sm flex flex-col items-center text-center"
-        >
-          {/* Image Container with fixed height */}
-          <div className="w-full h-24 mb-4 flex items-center justify-center">
-            <div className="relative w-40 h-40">
-              <Image
-                src='/Promlab-removebg-preview.png'
-                alt=''
-                fill
-                className="object-contain"
-              />
-            </div>
-          </div>
-
-          {/* Text */}
-          <div className="min-h-[60px] flex flex-col justify-center">
-            <h3 className="text-[#011133] font-semibold">---</h3>
-            <p className="text-gray-500 text-sm">---</p>
-          </div>
-        </div>
-        <div
-          className="bg-[#f7f9fc] p-6 rounded-lg shadow-sm flex flex-col items-center text-center"
-        >
-          {/* Image Container with fixed height */}
-          <div className="w-full h-24 mb-4 flex items-center justify-center">
-            <div className="relative w-20 h-20">
-              <Image
-                src=''
-                alt=''
-                fill
-                className="object-contain"
-              />
-            </div>
-          </div>
-
-          {/* Text */}
-          <div className="min-h-[60px] flex flex-col justify-center">
-            <h3 className="text-[#011133] font-semibold">---</h3>
-            <p className="text-gray-500 text-sm">---</p>
-          </div>
-        </div>
+        ))}
       </div>
 
       {/* CTA: Become a Partner */}
