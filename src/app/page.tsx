@@ -1,4 +1,6 @@
-import React from 'react';
+'use client'
+
+import { useEffect } from 'react'
 import Navber from './components/Navber';
 import Home from './components/Home';
 import Everyone from './components/mission';
@@ -12,9 +14,21 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import BackToTop from './components/Backtotop';
 import Research from './components/Research';
-import Event from './components/Event';
 
 export default function Page() {
+
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash) {
+      const el = document.getElementById(hash.replace('#', ''))
+      if (el) {
+        const yOffset = -80
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset
+        window.scrollTo({ top: y, behavior: 'smooth' })
+      }
+    }
+  }, [])
+
   return (
     <div>
       <Navber />
@@ -27,7 +41,6 @@ export default function Page() {
       <Customers />
       <Performance />
       <Team />
-      <Event />
       <Contact />
       <Footer />
       <BackToTop />
