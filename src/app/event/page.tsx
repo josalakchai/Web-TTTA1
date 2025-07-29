@@ -166,6 +166,16 @@ export default function EventPage() {
 
     return (
         <section className="max-w-6xl mx-auto py-16 px-4">
+            <div className="w-screen relative left-1/2 right-1/2 -mx-[50vw] mb-8" style={{ position: 'relative', left: '50%', right: '50%', marginLeft: '-50vw', marginRight: '-50vw', width: '100vw' }}>
+                <Image 
+                    src="/tiger-31.jpg" 
+                    alt="Tiger Banner" 
+                    width={99999} 
+                    height={99999} 
+                    className="w-full h-[400px] md:h-[600px] object-cover"
+                    priority
+                />
+            </div>
             <h1 className="text-center text-3xl font-bold mb-12 text-gray-800">กิจกรรม</h1>
 
             <div ref={carouselRef} className="carousel">
