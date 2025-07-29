@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import EventPage from '../page';
+// import EventPage from '../page';
 
 const eventData: Record<string, {
     title: string;
@@ -132,15 +132,15 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
                     <p className="text-yellow-700 font-medium mb-6">{event.note}</p>
                     <Link 
                         href="/event" 
-                        className="self-start text-sm text-blue-600 hover:text-blue-800 underline"
+                        className="self-start text-sm text-orange-600 hover:text-orange-800 underline"
                     >
                         ← กลับไปหน้าอีเวนต์
                     </Link>
                 </div>
             </div>
-            <div className="w-full mt-12">
+            {/* <div className="w-full mt-12">
                 <EventPage />
-            </div>
+            </div> */}
         </section>
     );
 }
