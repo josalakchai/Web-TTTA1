@@ -1,7 +1,8 @@
-import React from 'react';
+'use client';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-// import EventPage from '../page';
+import EventPage from '../../components/Saild';
 
 const eventData: Record<string, {
     title: string;
@@ -89,13 +90,36 @@ const eventData: Record<string, {
     },
 };
 
-export default async function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
-    const event = eventData[id];
+export default function EventDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    // ใส่ AOS
+    useEffect(() => {
+        import('aos').then(AOS => {
+            AOS.init({
+                duration: 800,
+                once: true,
+            });
+        });
+    }, []);
+
+    const [event, setEvent] = React.useState<{
+        title: string;
+        image: string;
+        content: string[];
+        note: string;
+    } | null>(null);
+    const [id, setId] = React.useState<string | null>(null);
+
+    React.useEffect(() => {
+        (async () => {
+            const { id } = await params;
+            setId(id);
+            setEvent(eventData[id]);
+        })();
+    }, [params]);
 
     if (!event) {
         return (
-            <div className="min-h-screen bg-white flex items-center justify-center">
+            <div className="min-h-screen bg-white flex items-center justify-center" data-aos="fade">
                 <div className="text-center">
                     <h1 className="text-2xl font-bold text-gray-800 mb-4">ไม่พบอีเวนต์</h1>
                     <p className="text-gray-600 mb-6">อีเวนต์ที่คุณค้นหาอาจถูกลบหรือไม่มีอยู่</p>
@@ -112,17 +136,20 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
 
     return (
         <section className="bg-white min-h-screen">
-            <div className="flex flex-col md:flex-row gap-8 px-4 md:px-10 py-8 md:py-20 bg-white max-w-7xl mx-auto">
-                <div className="flex-shrink-0 w-full md:w-auto">
+            <div
+                className="flex flex-col md:flex-row gap-8 px-4 md:px-10 py-8 md:py-20 bg-white max-w-7xl mx-auto"
+                data-aos="fade-up"
+            >
+                <div className="flex-shrink-0 w-full md:w-auto" data-aos="zoom-in">
                     <Image 
                         src={event.image} 
-                        alt={`Event ${id}`} 
+                        alt={`Event ${id ?? ''}`} 
                         width={600} 
                         height={500} 
                         className="rounded-lg object-contain w-full max-w-md mx-auto" 
                     />
                 </div>
-                <div className="flex flex-col text-gray-800 max-w-2xl">
+                <div className="flex flex-col text-gray-800 max-w-2xl" data-aos="fade-left">
                     <h2 className="text-2xl font-bold mb-4">{event.title}</h2>
                     <ul className="list-disc list-inside mb-6 space-y-2">
                         {event.content.map((item, index) => (
@@ -138,9 +165,9 @@ export default async function EventDetailPage({ params }: { params: Promise<{ id
                     </Link>
                 </div>
             </div>
-            {/* <div className="w-full mt-12">
+            <div className="w-full mt-12" data-aos="fade-up">
                 <EventPage />
-            </div> */}
+            </div>
         </section>
     );
 }
