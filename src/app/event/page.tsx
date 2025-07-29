@@ -1,282 +1,233 @@
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
-import 'aos/dist/aos.css';
-import { ChevronRight, ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
 
-type Event = {
+// รองรับ SSR/CSR: ใช้ dynamic import สำหรับ Flickity เฉพาะ client-side
+import 'flickity/css/flickity.css';
+
+// เพิ่ม type ที่รองรับการใช้งาน Flickity โดยไม่ใช้ any
+type FlickityType = {
+    destroy: () => void;
+};
+
+interface Event {
     id: string;
     src: string;
     alt: string;
-};
+    title: string;
+    date: string;
+    location: string;
+    content: string[];
+}
 
+// สามารถเพิ่ม/แก้ไขข้อมูล event ได้ง่าย รองรับการขยาย
 const events: Event[] = [
-    { id: '1', src: '/id1.png', alt: '' },
-    { id: '2', src: '/id4.png', alt: '' },
-    { id: '3', src: '/id2.png', alt: '' },
-    { id: '4', src: '/id3.png', alt: '' },
-    { id: '5', src: '/id5.png', alt: '' },
-    { id: '6', src: '/VP autoar.png', alt: '' },
-    { id: '7', src: '/NRLL.png', alt: '' },
+    {
+        id: '1',
+        src: '/id1.png',
+        alt: 'Smart WMS',
+        title: '📢 Smart WMS ระบบจัดการคลัง ❗',
+        date: '15 สิงหาคม 2568',
+        location: 'สำนักงานใหญ่ IE Thai Software',
+        content: [
+            'ติดตามสินค้าคงคลัง',
+            'จัดการการสั่งซื้อและจัดส่ง',
+            'ควบคุมคุณภาพ',
+            'วางแผนและจัดการทรัพยากร',
+            'รายงานและการวิเคราะห์',
+        ]
+    },
+    {
+        id: '2',
+        src: '/id4.png',
+        alt: 'Smart WMS v2',
+        title: '📢 Smart WMS (เวอร์ชัน 2) ❗',
+        date: '20 สิงหาคม 2568',
+        location: 'สำนักงานใหญ่ IE Thai Software',
+        content: [
+            'การแสดงผลแบบใหม่',
+            'การเชื่อมต่ออัตโนมัติ',
+            'รายงานแบบกราฟิก',
+            'จัดการซัพพลายเออร์',
+        ]
+    },
+    {
+        id: '3',
+        src: '/id2.png',
+        alt: 'AI Workshop',
+        title: '📢 AI Workshop ❗',
+        date: '1 กันยายน 2568',
+        location: 'เชียงใหม่ AI Center',
+        content: [
+            'เรียนรู้ AI และ Machine Learning',
+            'Workshop ปฏิบัติการจริง',
+            'การประยุกต์ใช้ AI ในธุรกิจ',
+            'การพัฒนา AI Model',
+        ]
+    },
+    {
+        id: '4',
+        src: '/id3.png',
+        alt: 'Cloud Computing',
+        title: '📢 Cloud Computing Seminar ❗',
+        date: '12 กันยายน 2568',
+        location: 'กรุงเทพฯ Tech Convention Hall',
+        content: [
+            'AWS, Azure, Google Cloud',
+            'การจัดการ Cloud Infrastructure',
+            'Serverless Computing',
+            'Cloud Security',
+        ]
+    },
+    {
+        id: '5',
+        src: '/id5.png',
+        alt: 'Web Development',
+        title: '📢 Web Development Bootcamp ❗',
+        date: '22 กันยายน 2568',
+        location: 'Online Live Zoom',
+        content: [
+            'React, Next.js, TypeScript',
+            'Full-Stack Development',
+            'Database Design',
+            'Deployment และ DevOps',
+        ]
+    },
+    {
+        id: '6',
+        src: '/VP autoar.png',
+        alt: 'Data Science',
+        title: '📢 Data Science Workshop ❗',
+        date: '1 ตุลาคม 2568',
+        location: 'มหาวิทยาลัยธรรมศาสตร์',
+        content: [
+            'Data Analysis และ Visualization',
+            'Python สำหรับ Data Science',
+            'Machine Learning Algorithms',
+            'Big Data Processing',
+        ]
+    },
+    {
+        id: '7',
+        src: '/NRLL.png',
+        alt: 'Cybersecurity',
+        title: '📢 Cybersecurity Training ❗',
+        date: '15 ตุลาคม 2568',
+        location: 'มหาวิทยาลัยเทคโนโลยีมหานคร',
+        content: [
+            'Network Security',
+            'Penetration Testing',
+            'Security Best Practices',
+            'Incident Response',
+        ]
+    }
 ];
 
-export default function Customers() {
-    const sliderRef = useRef<HTMLDivElement>(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const isDragging = useRef(false);
-    const startX = useRef(0);
-    const scrollLeft = useRef(0);
-    // const dragStarted = useRef(false);
+// กำหนดขนาดภาพ (width/height) ให้เหมาะสมกับ aspect ratio 3:4
+const IMAGE_WIDTH = 240;
+const IMAGE_HEIGHT = 320;
 
-    const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
-    const itemsPerSlide = 3;
-    const eventData: Record<string, {
-        title: string;
-        image: string;
-        content: string[];
-        note: string;
-    }> = {
-        '1': {
-            title: '📢 Smart WMS ระบบจัดการคลัง ❗',
-            image: '/id1.png',
-            content: [
-                'ติดตามสินค้าคงคลัง',
-                'จัดการการสั่งซื้อและจัดส่ง',
-                'ควบคุมคุณภาพ',
-                'วางแผนและจัดการทรัพยากร',
-                'รายงานและการวิเคราะห์',
-            ],
-            note: '🌟 ช่วยลดข้อผิดพลาดในการจัดการ เพิ่มประสิทธิภาพการทำงานภายในคลังได้ดีเยี่ยม',
-        },
-        '2': {
-            title: '📢 Smart WMS (เวอร์ชัน 2) ❗',
-            image: '/id4.png',
-            content: [
-                'การแสดงผลแบบใหม่',
-                'การเชื่อมต่ออัตโนมัติ',
-                'รายงานแบบกราฟิก',
-                'จัดการซัพพลายเออร์',
-            ],
-            note: '🌟 ปรับปรุง UI/UX สำหรับประสบการณ์ที่ลื่นไหลและมีประสิทธิภาพ',
-        },
-        '3': {
-            title: '📢Event ❗',
-            image: '/id2.png',
-            content: [
-                'การแสดงผลแบบใหม่',
-                'การเชื่อมต่ออัตโนมัติ',
-                'รายงานแบบกราฟิก',
-                'จัดการซัพพลายเออร์',
-            ],
-            note: '🌟 ปรับปรุง UI/UX สำหรับประสบการณ์ที่ลื่นไหลและมีประสิทธิภาพ',
-        },
-        '4': {
-            title: '📢 Event ❗',
-            image: '/id3.png',
-            content: [
-                'การแสดงผลแบบใหม่',
-                'การเชื่อมต่ออัตโนมัติ',
-                'รายงานแบบกราฟิก',
-                'จัดการซัพพลายเออร์',
-            ],
-            note: '🌟 ปรับปรุง UI/UX สำหรับประสบการณ์ที่ลื่นไหลและมีประสิทธิภาพ',
-        },
-        '5': {
-            title: '📢 Event ❗',
-            image: '/id5.png',
-            content: [
-                'การแสดงผลแบบใหม่',
-                'การเชื่อมต่ออัตโนมัติ',
-                'รายงานแบบกราฟิก',
-                'จัดการซัพพลายเออร์',
-            ],
-            note: '🌟 ปรับปรุง UI/UX สำหรับประสบการณ์ที่ลื่นไหลและมีประสิทธิภาพ',
-        },
-        '6': {
-            title: '📢 Event ❗',
-            image: '/id4.png',
-            content: [
-                'การแสดงผลแบบใหม่',
-                'การเชื่อมต่ออัตโนมัติ',
-                'รายงานแบบกราฟิก',
-                'จัดการซัพพลายเออร์',
-            ],
-            note: '🌟 ปรับปรุง UI/UX สำหรับประสบการณ์ที่ลื่นไหลและมีประสิทธิภาพ',
-        },
-        '7': {
-            title: '📢 Event ❗',
-            image: '/id4.png',
-            content: [
-                'การแสดงผลแบบใหม่',
-                'การเชื่อมต่ออัตโนมัติ',
-                'รายงานแบบกราฟิก',
-                'จัดการซัพพลายเออร์',
-            ],
-            note: '🌟 ปรับปรุง UI/UX สำหรับประสบการณ์ที่ลื่นไหลและมีประสิทธิภาพ',
-        },
-    };
-
-    const selectedEvent = selectedEventId ? eventData[selectedEventId] : null;
-
-    const handleClick = () => {
-        window.location.href = 'https://www.facebook.com/thetigerteamacademy?locale=th_TH';
-    };
-
-
-    const scrollSlider = (direction: 'left' | 'right') => {
-        if (!sliderRef.current) return;
-
-        const scrollAmount = sliderRef.current.offsetWidth;
-        const maxIndex = Math.ceil(events.length / itemsPerSlide) - 1;
-
-        if (direction === 'left' && currentIndex > 0) {
-            setCurrentIndex(currentIndex - 1);
-            sliderRef.current.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-        } else if (direction === 'right' && currentIndex < maxIndex) {
-            setCurrentIndex(currentIndex + 1);
-            sliderRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        }
-    };
-
-
-    const handleImageClick = (event: Event) => {
-        setSelectedEventId(event.id);
-    };
+export default function EventPage() {
+    const carouselRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const slider = sliderRef.current;
-        if (!slider) return;
-
-        const handleMouseDown = (e: MouseEvent) => {
-            isDragging.current = true;
-            slider.classList.add('cursor-grabbing');
-            startX.current = e.pageX - slider.offsetLeft;
-            scrollLeft.current = slider.scrollLeft;
-            document.body.style.userSelect = 'none';
+        let flickityInstance: FlickityType | null = null;
+        // รองรับ SSR/CSR: ตรวจสอบ window และ dynamic import Flickity เฉพาะ client
+        const setupFlickity = async () => {
+            if (typeof window !== 'undefined' && carouselRef.current) {
+                // dynamic import Flickity only on client
+                const FlickityModule = await import('flickity');
+                // ใช้ as unknown as เพื่อ type-safe
+                const Flickity = (FlickityModule.default || FlickityModule) as unknown as {
+                    new (el: Element, options?: Record<string, unknown>): FlickityType;
+                };
+                flickityInstance = new Flickity(carouselRef.current, {
+                    cellAlign: 'left',
+                    contain: true,
+                    wrapAround: true,
+                    freeScroll: true,
+                    autoPlay: 3000,
+                    pauseAutoPlayOnHover: true,
+                    pageDots: true,
+                });
+            }
         };
+        setupFlickity();
 
-        const handleMouseMove = (e: MouseEvent) => {
-            if (!isDragging.current) return;
-            e.preventDefault();
-            const x = e.pageX - slider.offsetLeft;
-            const walk = (x - startX.current) * 1.5;
-            slider.scrollLeft = scrollLeft.current - walk;
-        };
-
-        const stopDragging = () => {
-            isDragging.current = false;
-            slider.classList.remove('cursor-grabbing');
-            document.body.style.userSelect = '';
-        };
-
-        slider.addEventListener('mousedown', handleMouseDown);
-        slider.addEventListener('mousemove', handleMouseMove);
-        slider.addEventListener('mouseup', stopDragging);
-        slider.addEventListener('mouseleave', stopDragging);
-        window.addEventListener('mouseup', stopDragging);
-
-        slider.addEventListener('touchstart', (e) => {
-            isDragging.current = true;
-            startX.current = e.touches[0].pageX - slider.offsetLeft;
-            scrollLeft.current = slider.scrollLeft;
-        });
-
-        slider.addEventListener('touchmove', (e) => {
-            if (!isDragging.current) return;
-            const x = e.touches[0].pageX - slider.offsetLeft;
-            const walk = (x - startX.current) * 1.5;
-            slider.scrollLeft = scrollLeft.current - walk;
-        });
-
-        slider.addEventListener('touchend', stopDragging);
-
+        // Cleanup Flickity instance on unmount
         return () => {
-            window.removeEventListener('mouseup', stopDragging);
+            if (flickityInstance && typeof flickityInstance.destroy === 'function') {
+                flickityInstance.destroy();
+            }
         };
     }, []);
 
     return (
-        <section className="bg-white py-18">
-            <Image src="/tiger-31.jpg" alt="" width={9000} height={1000} className="w-full h-120 object-cover" />
+        <section className="max-w-6xl mx-auto py-16 px-4">
+            <h1 className="text-center text-3xl font-bold mb-12 text-gray-800">กิจกรรม</h1>
 
-            {selectedEvent && (
-                <div className="flex flex-col md:flex-row gap-8 px-10 py-20 bg-white">
-                    <div className="flex-shrink-0">
-                        <Image src={selectedEvent.image} alt={`Event ${selectedEventId}`} width={600} height={500} className="rounded-lg object-contain" />
-                    </div>
-                    <div className="flex flex-col text-gray-800 max-w-2xl">
-                        <h2 className="text-2xl font-bold mb-2">{selectedEvent.title}</h2>
-                        <ul className="list-disc list-inside mb-4 space-y-1">
-                            {selectedEvent.content.map((item, index) => (
-                                <li key={index}>{item}</li>
-                            ))}
-                        </ul>
-                        <p className="text-yellow-700 font-medium">{selectedEvent.note}</p>
-                        <button onClick={() => setSelectedEventId(null)} className="mt-4 self-start text-sm text-blue-600 underline">
-                            ❌ ปิดรายละเอียด
-                        </button>
-                    </div>
-                </div>
-            )}
-
-            {/* Carousel */}
-            <div className="relative group mx-4 md:mx-32 px-30">
-                <div className="text-center mb-4">
-                    <h1 className="text-2xl font-bold text-black">กิจกรรม</h1>
-                </div>
-
-                <div className="relative">
-                    {/* Slider */}
-                    <div ref={sliderRef} className="flex overflow-x-auto scroll-smooth no-scrollbar gap-3 px-8">
-                        {events.map((event) => (
+            <div ref={carouselRef} className="carousel">
+                {events.map((event) => (
+                    <div
+                        key={event.id}
+                        className="carousel-cell w-full sm:w-2/3 md:w-1/3 lg:w-1/4 px-2"
+                        style={{ position: 'relative' }}
+                    >
+                        <Link href={`/event/${event.id}`} className="block group focus:outline-none">
                             <div
-                                key={event.id}
-                                className="flex-shrink-0 py-12 w-1/3 cursor-pointer"
-                                onClick={() => handleImageClick(event)}
+                                className="portfolio-item img-zoom"
+                                style={{ width: `${IMAGE_WIDTH}px`, margin: '0 auto' }}
                             >
-                                <div className="rounded-xl overflow-hidden shadow-md mx-auto">
-                                    <Image src={event.src} alt={event.alt} width={1920} height={1080} className="object-cover w-full h-90" />
+                                <div className="portfolio-item-wrap border-radius1 overflow-hidden shadow transition duration-300">
+                                    <div
+                                        className="portfolio-image relative bg-gray-100"
+                                        style={{
+                                            width: '100%',
+                                            height: `${IMAGE_HEIGHT}px`,
+                                            aspectRatio: '3/4',
+                                        }}
+                                    >
+                                        <Image
+                                            src={event.src}
+                                            alt={event.alt}
+                                            width={IMAGE_WIDTH}
+                                            height={IMAGE_HEIGHT}
+                                            className="object-cover w-full h-full"
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'cover',
+                                                objectPosition: 'center',
+                                                backgroundColor: '#f3f4f6',
+                                            }}
+                                            sizes="(max-width: 768px) 60vw, 20vw"
+                                        />
+                                        {/* Hover overlay */}
+                                        <div
+                                            className="absolute inset-0 flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                            style={{
+                                                background: 'rgba(0,0,0,0.6)',
+                                                zIndex: 2,
+                                            }}
+                                        >
+                                            <div className="portfolio-description px-4 py-2 text-center">
+                                                <h3 className="text-base font-semibold text-white mb-2">{event.title}</h3>
+                                                <p className="text-xs text-gray-200 mb-2">{event.date} | {event.location}</p>
+                                                <div className="text-gray-100 text-xs space-y-0.5 mb-1 text-left">
+                                                    {event.content.map((line, index) => (
+                                                        <p key={index}>{index + 1}. {line}</p>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        ))}
+                        </Link>
                     </div>
-
-                    {/* Navigation Buttons */}
-                    <button
-                        onClick={() => scrollSlider('left')}
-                        className="absolute -left-4 md:-left-12 top-1/2 -translate-y-1/2 bg-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition duration-300"
-                    >
-                        <ChevronLeft className="w-6 h-6 text-black" />
-                    </button>
-                    <button
-                        onClick={() => scrollSlider('right')}
-                        className="absolute -right-4 md:-right-12 top-1/2 -translate-y-1/2 bg-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 transition duration-300"
-                    >
-                        <ChevronRight className="w-6 h-6 text-black" />
-                    </button>
-                </div>
-
-                {/* Dot Pagination */}
-                <div className="flex justify-center mt-4 space-x-2">
-                    {Array.from({ length: Math.ceil(events.length / itemsPerSlide) }).map((_, index) => (
-                        <span
-                            key={index}
-                            className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex ? 'bg-gray-500' : 'bg-gray-300'
-                                }`}
-                        />
-                    ))}
-                </div>
-            </div>
-
-            {/* Event Button */}
-            <div className="flex justify-center mt-12">
-                <button
-                    className="bg-blue-500 font-medium px-12 py-2 rounded-full text-base md:text-lg text-white underline"
-                    onClick={handleClick}
-                >
-                    Event
-                </button>
+                ))}
             </div>
         </section>
     );
